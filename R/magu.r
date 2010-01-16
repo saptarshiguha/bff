@@ -9,7 +9,7 @@
         ,sep=.Platform$file.sep)
   invisible(sapply(files,file.create))
   f1 <- file(files[1],"wb")
-  dict <- list(names=new.env())
+  dict <- new.env()
   save(dict,file=f1)
   close(f1)
   .append(...,file=files)
@@ -34,7 +34,7 @@ bappend <- function(..., file){
   curp <- seek(objectfile)
   sapply(names,function(r){
     save(list=r,file=objectfile)
-    assign(r,list(curp,file[2]),envir=dict$names)
+    assign(r,list(curp,file[2]),envir=dict)
     curp <<- seek(objectfile)
   })
   close(objectfile)
@@ -46,14 +46,14 @@ bload <- function(file){
   dictinfo <- new.env()
   sapply(dictfiles,function(r){
     load(r)
-    sapply(ls(dict$names),function(r){
-      assign(r, dict$names[[r]],dictinfo)
+    sapply(ls(dict),function(r){
+      assign(r, dict[[r]],dictinfo)
     })})
   en <- parent.frame()
   sapply(ls(dictinfo),function(varname){
     delayedAssign(varname, value={
-      objectfile=file(get(varname,dictinfo)[[2]],"rb")
-      seek(objectfile,get(varname,dictinfo)[[1]])
+      objectfile=file(dictinfo[[varname]][[2]],"rb")
+      seek(objectfile,dictinfo[[varname]][[1]])
       load(objectfile)
       close(objectfile)
       get(varname)
