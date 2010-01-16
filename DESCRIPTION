@@ -1,0 +1,10 @@
+Package: bff
+Type: Package
+Title: Lazy loaded Object File Format
+Version: 0.1
+Date: 2009-08-30
+Author: Saptarshi Guha
+Maintainer: Saptarshi Guha  <sguha@purdue.edu>
+Description: Lazy loads/saves R objects
+License: GPL 2.0
+Packaged: Fri Mar  6 17:02:01 2009; sguha
