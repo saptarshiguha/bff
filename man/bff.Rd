@@ -30,4 +30,9 @@ bload(file)
 	The data set is lazy loaded using \code{delayedAssign}: the names of all objects in the data are resent in memory but none are loaded until needed.
 
 	There can be multiple subdirectories inside of \code{file} (arbitrarily deep), each directory must contain at the least \code{object} and \code{dict}. \code{bff} will recursively read in \code{dict} files and populate the current environment's namespace with the names of the objects present.
+
+	Also note, a give \code{object} and \code{dict} are not thread-safe, thus do not append from multiple R processes. A work around is to create a subfolder and append to that.
 }
+
+
+	
