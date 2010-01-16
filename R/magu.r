@@ -45,13 +45,21 @@ bappend <- function(..., file){
 }  
 
 bload <- function(file){
-  dictfiles <- list.files(path.expand(file),pattern="dict",recursive=T,full=T)
+  iscompact <- sprintf("%s%s%s",path.expand(file),.Platform$file.sep,".compact")
+  if(!is.na(file.info(iscompact)['size'])){
+    dictfiles <- list.files(path.expand(file),pattern="dict",recursive=F,full=T)
+  }else{
+    dictfiles <- list.files(path.expand(file),pattern="dict",recursive=T,full=T)
+    file.create(iscompact)
+  }
   dictinfo <- new.env()
   sapply(dictfiles,function(r){
     load(r)
     sapply(ls(dict),function(r){
       assign(r, dict[[r]],dictinfo)
     })})
+  dict=dictinfo
+  save(dict,file=sprintf("%s%s%s",path.expand(file),.Platform$file.sep,"dict"))
   en <- parent.frame()
   sapply(ls(dictinfo),function(varname){
     delayedAssign(varname, value={
