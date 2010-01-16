@@ -9,7 +9,7 @@
         ,sep=.Platform$file.sep)
   invisible(sapply(files,file.create))
   f1 <- file(files[1],"wb")
-  dict <- list(end=0,names=new.env())
+  dict <- list(names=new.env())
   save(dict,file=f1)
   close(f1)
   .append(...,file=files)
@@ -31,16 +31,13 @@ bappend <- function(..., file){
   names <- as.character(substitute(list(...)))[-1L]
   load(file[1])
   objectfile <- file(file[2],"ab")
-  seek(objectfile,dict$end)
   curp <- seek(objectfile)
   sapply(names,function(r){
     save(list=r,file=objectfile)
     assign(r,list(curp,file[2]),envir=dict$names)
     curp <<- seek(objectfile)
   })
-  endpos <- seek(objectfile)
   close(objectfile)
-  dict$end <- endpos
   save(dict,file=file[1])
 }  
 
