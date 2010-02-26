@@ -1,0 +1,16 @@
+Saving several large objects totalling several hundreds of megabytes in a single
+Rdata file is not efficient:
+
+- not possible to load one object, all objects are loaded even if you don't need them
+- =attach= also load the Rdata file, even though all might not be needed
+
+Using this file format it is possible to :
+- easily append objects to a dataset
+- load multiple folders by loading the top level folder
+- a type of attach i.e the objects are in the namespace, but only loaded using /promises/
+
+* Defect 
+
+When appending an already existing object, the previous one is deleted and the
+new one is appended to the end of the file. This causes fragmentation and the
+datasets need to tbe /packed/ or /defragmented/. This is something todo.
